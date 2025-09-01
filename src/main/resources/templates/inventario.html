@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>inventario</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="Icon" type="image/png" th:href="@{/images/logo_MIALEDS_pestaña.png}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+<body>
+
+    <div th:replace="~{fragments/menu :: header}"></div>
+
+    <main class="main">
+        <!--recuadro de botones principales-->
+        <div class="row">
+            <div class="col s12 botones_inventario">
+                <!-- Formulario para buscar productos -->
+                <div class="col m6 s12">
+                    <!-- El formulario envía una solicitud POST al controlador con el parámetro "menu=inventario" -->
+                    <form th:action="@{/inventario/buscar}" method="GET">
+                        <!-- Campo de entrada para buscar productos -->
+                        <div class="input-field col s10  m5 buscador">
+                            <!-- Input de texto para la búsqueda de productos -->
+                            <input type="text" name="producto">
+                            <!-- Label asociado al input -->
+                            <label for="producto">Buscar productos</label>
+                        </div>
+                        <!-- Botón para enviar el formulario de búsqueda -->
+                        <button type="submit" class="btn white boton_buscador red-text col s1">
+                            <!-- Icono de búsqueda -->
+                            <i class="material-icons">search</i>
+                        </button>
+                    </form>
+                </div>
+                <!-- Sección para el botón de productos escasos -->
+                <div class="col s3 center-align cuadro_escasos">
+                    <a class="btn modal-trigger tooltipped red-text boton_escasos" data-position="bottom" data-tooltip="informacion aceites escasos" href="#productos_escasos">
+                        <i class="material-icons">info</i>
+                    </a>
+                </div>
+                <!-- Modal para mostrar productos escasos -->
+                <div id="productos_escasos" class="modal center-align">
+                    <!-- Contenido del modal -->
+                    <div class="modal-content">
+                        <!-- Título del modal en color rojo -->
+                        <h5 class="red-text">Productos escasos</h5>
+                        <!-- Tabla para mostrar la información de productos escasos -->
+                        <table class="centered">
+                            <!-- Encabezado de la tabla -->
+                            <thead>
+                                <tr>
+                                    <!-- Columnas de la tabla -->
+                                    <th>Producto</th>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Iteración sobre la lista de productos escasos usando JSTL -->
+                                    <tr th:each="pro : ${productosEsc}">
+                                        <!-- Mostrar nombre del producto -->
+                                        <td th:text="${pro.nombre}"></td>
+                                        <!-- Mostrar presentación del producto -->
+                                        <td th:text="${pro.presentacion}"></td>
+                                        <!-- Mostrar cantidad existente del producto -->
+                                        <td th:text="${pro.cantidadExistente}"></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pie del modal con un botón para cerrar -->
+                    <div class="modal-footer cuadro_botones_1 col s12">
+                        <!-- Enlace para cerrar el modal y redirigir a la lista de productos -->
+                        <a href="#" class="modal-close waves-effect waves-flat btn-flat red white-text">cerrar</a>
+                    </div>
+                </div>
+                <!--ingreso, salida y nuevos productos-->
+                <div class="col s5 m2 cuadro_botones_opciones">
+                    <div class="col s12">
+                        <a class="btn modal-trigger red crud" href="#buscar_entradas">
+                            registro entradas
+                        </a>   
+                    </div>
+                    <div class="col s12"  th:if="${admin}">
+                        <a class="btn modal-trigger red crud" href="#buscar_salidas">
+                            registro salidas
+                        </a>
+                    </div>
+                    <div class="col s12"  th:if="${admin}">
+                        <a class="btn modal-trigger red crud" href="#producto_nuevo">
+                            nuevo producto
+                        </a>
+                    </div>
+                    <div class="col s1 cuadro_botones_buscar">
+                    </div>
+                </div>
+                <!-- Modal para registrar movimiento de productos -->
+                <div id="registrar_movimiento" class="modal center-align">
+                    <!-- Contenido del modal -->
+                    <div class="modal-content">
+                        <!-- Título del modal en color rojo -->
+                        <h5 class="red-text">Movimiento de productos</h5>
+                        <div class="col s12">
+                            <!-- Formulario para registrar el movimiento -->
+                            <form th:action="@{/inventario/movimiento}" method="POST">
+                                <!-- Campo oculto para el ID del movimiento -->
+                                <div class="input-field">
+                                    <input type="hidden" name="id_movimiento">
+                                </div>
+                                <!-- Campo oculto para el tipo de movimiento (entrada/salida) -->
+                                <div class="input-field">
+                                    <input type="hidden" name="movimiento">
+                                </div>
+                                <!-- Campo para seleccionar el producto -->
+                                <div class="input-field col s12 m6 buscador">
+                                    <input type="text" id="nombre_producto_movimiento" name="nombre_producto_movimiento" placeholder=" " class="autocomplete" readonly>
+                                    <label for="nombre_producto_movimiento">
+                                        Producto
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar la cantidad del producto -->
+                                <div class="input-field col s6  m2">
+                                    <input type="number" id="cantidad_movimiento" min="0" name="cantidad_movimiento" class="autocomplete" data-position="bottom" required>
+                                    <label for="cantidad_movimiento">
+                                        Cantidad
+                                    </label>
+                                </div>
+                                <!-- Campo para seleccionar la fecha del movimiento -->
+                                <div class="input-field col s6 m4">
+                                    <input type="date" id="fecha_movimiento" name="fecha_movimiento" data-position="bottom" required>
+                                </div>
+                                <!-- Espacio para ajuste del diseño -->
+                                <div class="col s12"></div>
+                                <div class="col s5"></div>
+                                <!-- Pie del modal con botones para aceptar y cerrar -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para enviar el formulario -->
+                                    <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Aceptar</button>
+                                    <!-- Enlace para cerrar el modal y regresar a la lista de productos -->
+                                    <a th:href="@{/inventario/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text">Cerrar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal para editar productos -->
+                <div id="editar_producto" class="modal center-align" th:if="${admin}">
+                    <!-- Contenido del modal -->
+                    <div class="modal-content white">
+                        <!-- Título del modal en color rojo -->
+                        <h5 class="red-text">Editar producto</h5>
+                        <div class="col s12">
+                            <!-- Formulario para editar el producto -->
+                            <form th:action="@{/inventario/editar}" method="POST">
+                                <input type="hidden" name="_method" value="PUT">
+                                <!-- Campo oculto para el ID del producto a editar -->
+                                <div class="input-field">
+                                    <input type="hidden" name="id_editar">
+                                </div>
+                                <!-- Campo para ingresar el nombre del producto -->
+                                <div class="input-field col s12 m3">
+                                    <input type="text" id="nombre_producto_editar" placeholder="nombre" name="nombre_editar" class="autocomplete" required>
+                                    <label for="nombre_producto_editar">
+                                        Nombre producto
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar la presentación del producto -->
+                                <div class="input-field col s12 m3">
+                                    <input type="text" id="presentacion_editar" placeholder="presentacion" name="presentacion_editar" class="autocomplete" required>
+                                    <label for="presentacion_editar">
+                                        Presentación
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar el precio de compra del producto -->
+                                <div class="input-field col s6 m3">
+                                    <input type="number" id="precio_compra_editar" placeholder="precio compra" name="precio_compra_editar" class="autocomplete" required>
+                                    <label for="precio_compra_editar">
+                                        Precio compra
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar el precio de venta del producto -->
+                                <div class="input-field col s6 m3">
+                                    <input type="number" id="precio_venta_editar" placeholder="precio venta" name="precio_venta_editar" class="autocomplete" required>
+                                    <label for="precio_venta_editar">
+                                        Precio venta
+                                    </label>
+                                </div>
+                                <!-- Campo oculto para la cantidad del producto -->
+                                <div class="input-field">
+                                    <input type="hidden" name="cantidad_editar">
+                                </div>
+                                <!-- Pie del modal con botones para actualizar y cerrar -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para enviar el formulario y actualizar el producto -->
+                                    <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Actualizar</button>
+                                    <!-- Enlace para cerrar el modal y regresar a la lista de productos -->
+                                    <a th:href="@{/inventario/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text">cerrar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal para registrar nuevos productos -->
+                <div id="producto_nuevo" class="modal center-align" th:if="${admin}">
+                    <!-- Contenido del modal -->
+                    <div class="modal-content white">
+                        <!-- Título del modal en color rojo -->
+                        <h5 class="red-text">Registrar nuevo producto</h5>
+                        <div class="col s12">
+                            <!-- Formulario para registrar un nuevo producto -->
+                            <form th:action="@{/inventario/nuevo}" method="POST">
+                                <!-- Campo para ingresar el nombre del nuevo producto -->
+                                <div class="input-field col s12 m3">
+                                    <input type="text" id="nombre_producto_nuevo" name="nombre_producto_nuevo" class="autocomplete" required>
+                                    <label for="nombre_producto_nuevo">
+                                        Nombre producto
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar la presentación del nuevo producto -->
+                                <div class="input-field col s12 m3">
+                                    <input type="text" id="presentacion_nuevo" name="presentacion_nuevo" class="autocomplete" required>
+                                    <label for="presentacion_nuevo">
+                                        Presentación
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar el precio de compra del nuevo producto -->
+                                <div class="input-field col s6 m3">
+                                    <input type="number" id="precio_compra_nuevo" name="precio_compra_nuevo" class="autocomplete" required>
+                                    <label for="precio_compra_nuevo">
+                                        Precio compra
+                                    </label>
+                                </div>
+                                <!-- Campo para ingresar el precio de venta del nuevo producto -->
+                                <div class="input-field col s6 m3">
+                                    <input type="number" id="precio_venta_nuevo" name="precio_venta_nuevo" class="autocomplete" required>
+                                    <label for="precio_venta_nuevo">
+                                        Precio venta
+                                    </label>
+                                </div>
+                                <!-- Campo oculto para la cantidad inicial del nuevo producto, con valor predeterminado de 0 -->
+                                <div class="input-field">
+                                    <input type="hidden" name="cantidad_nuevo" value="0">
+                                </div>
+                                <!-- Pie del modal con botones para aceptar y cerrar -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para enviar el formulario y agregar el nuevo producto -->
+                                    <button type="submit"  class="btn waves-effect waves-flat btn-flat green white-text">Aceptar</button>
+                                    <!-- Enlace para cerrar el modal y regresar a la lista de productos -->
+                                    <a class="modal-close waves-effect waves-flat btn-flat red white-text">Cerrar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>               
+                <!-- Modal para eliminar un producto -->
+                <div id="eliminar_producto" class="modal center-align" th:if="${admin}">
+                    <!-- Contenido del modal -->
+                    <div class="modal-content white">
+                        <!-- Mensaje de confirmación de eliminación -->
+                        <h6 class="red-text">¿Seguro deseas eliminar el producto <span id="producto_eliminar"></span>?</h6>
+                        <div class="col s12">
+                            <!-- Formulario para eliminar el producto -->
+                            <form th:action="@{/inventario/eliminar}" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <!-- Campo oculto para el ID del producto a eliminar -->
+                                <div class="input-field">
+                                    <input type="hidden" name="id_eliminar">
+                                </div>
+                                <!-- Pie del modal con botones para confirmar o cancelar -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para confirmar la eliminación del producto -->
+                                    <button type="submit" class="btn waves-effect waves-flat btn-flat red white-text">Eliminar</button>
+                                    <!-- Enlace para cancelar la eliminación y cerrar el modal -->
+                                    <a th:href="@{/inventario/listar}" class="modal-close waves-effect waves-flat btn-flat green white-text">Cancelar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--buscar registros de entradas de productos-->
+                <div id="buscar_entradas" class="modal center-align" th:if="${admin}">
+                    <div class="modal-content white">
+                        <div class="col s12">
+                            <h5 class="red-text">Registros de entradas de productos</h5>
+                        </div>
+                        <div class="col s12">
+                        <table class="centered">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="entradaKardex : ${kardexE}">
+                                    <!-- Mostrar nombre del producto -->
+                                    <td th:text="${entradaKardex.producto.nombre}"></td>
+                                    <!-- Mostrar presentación del producto -->
+                                    <td th:text="${entradaKardex.producto.presentacion}"></td>
+                                    <!-- Mostrar cantidad existente del producto -->
+                                    <td th:text="${entradaKardex.cantidad}"></td>
+                                    <td th:text="${entradaKardex.fecha}"></td>
+                                </tr>     
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="modal-footer cuadro_botones_1">
+                        <a href="#!" class="modal-close waves-effect waves-flat btn-flat red white-text col s3">cerrar</a>
+                    </div>
+                </div>
+
+                <!--buscar registro de salida de registros-->
+
+                <div id="buscar_salidas" class="modal center-align" th:if="${admin}">
+                    <div class="modal-content white">
+                        <div class="col s12">
+                            <h5 class="red-text">Registros de salidas de productos</h5>
+                        </div>
+                        <div class="col s12">
+                        <table class="centered">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="salidaKardex : ${kardexS}">
+                                    <!-- Mostrar nombre del producto -->
+                                    <td th:text="${salidaKardex.producto.nombre}"></td>
+                                    <!-- Mostrar presentación del producto -->
+                                    <td th:text="${salidaKardex.producto.presentacion}"></td>
+                                    <!-- Mostrar cantidad existente del producto -->
+                                    <td th:text="${salidaKardex.cantidad}"></td>
+                                    <td th:text="${salidaKardex.fecha}"></td>
+                                </tr>      
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer cuadro_botones_1">
+                        <a href="#!" class="modal-close waves-effect waves-flat btn-flat red white-text col s3">cerrar</a>
+                    </div>
+                </div>
+        </div>   
+        <!-- Tabla de productos -->
+        <div>
+            <div class="col s12">
+                <!-- Título de la sección de inventario -->
+                <h5 class="red-text center-align">Inventario de productos</h5>
+
+                <!-- Tabla de productos -->
+                <table class="centered">
+                    <!-- Cabecera de la tabla -->
+                    <thead id="cabeceraProducto">
+                        <tr>
+                            <!-- Encabezados de las columnas -->
+                            <th>Producto</th>
+                            <th>Presentación</th>
+                            <th th:if="${admin}">Precio compra</th>
+                            <th>Precio venta</th>
+                            <th>Cantidad</th>
+                            <th>
+                                <!-- Botón de ajustes de inventario con un menú desplegable -->
+                                <a class="dropdown-trigger btn tooltipped red-text boton_ajustes" 
+                                   data-position="bottom" 
+                                   data-tooltip="ajustes de inventario" 
+                                   href='#' 
+                                   data-target='settings'>
+                                    <i class="tiny material-icons">settings</i>
+                                </a>
+                                <!-- Menú desplegable para opciones de ajustes -->
+                                <ul id='settings' class='dropdown-content'>
+                                    <li><a href="#!" data-value="editar" th:if="${admin}">
+                                        <i class="material-icons">edit</i>Editar producto
+                                    </a></li>
+                                    <li><a href="#!" data-value="eliminar" th:if="${admin}">
+                                        <i class="material-icons">delete</i>Eliminar producto
+                                    </a></li>
+                                    <li><a href="#!" data-value="entrada">
+                                        <i class="material-icons">exposure_plus_1</i>Entrada producto
+                                    </a></li>
+                                    <li><a href="#!" data-value="salida" th:if="${admin}">
+                                        <i class="material-icons">remove</i>Salida producto
+                                    </a></li>
+                                </ul>
+                            </th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de la tabla -->
+                    <tbody>
+                        <!-- Itera sobre la lista de productos y crea una fila para cada uno -->
+                        <tr th:each="pro : ${productos}">
+                            <!-- Muestra los detalles del producto -->
+                            <td th:text="${pro.nombre}"></td>
+                            <td th:text="${pro.presentacion}"></td>
+                            <td th:text="${pro.precioCompra}" th:if="${admin}"></td>
+                            <td th:text="${pro.precioVenta}"></td>
+                            <td th:text="${pro.cantidadExistente}"></td>
+                            <!-- Columna para acciones relacionadas con el producto -->
+                            <td>
+                                <!-- Enlace de opción con datos del producto (se muestra u oculta según sea necesario) -->
+                                <a class="btn red-text white opciones" 
+                                   id="selector" 
+                                   style="display: none;"
+                                   th:data-id="${pro.idProducto}"
+                                   th:data-nombre="${pro.nombre}"
+                                   th:data-presentacion="${pro.presentacion}"
+                                   th:data-precio-compra="${pro.precioCompra}"
+                                   th:data-precio-venta="${pro.precioVenta}"
+                                   th:data-cantidad="${pro.cantidadExistente}">
+                                    <i class="material-icons tiny">radio_button_unchecked</i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="page-footer red">
+        <small>&copy; Derechos Reservados 2024</small>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/configInventario.js}"></script>
+    <script th:src="@{/js/erroresForm.js}"></script>
+</body>
+</html>

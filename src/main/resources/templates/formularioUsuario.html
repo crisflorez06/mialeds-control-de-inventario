@@ -1,0 +1,105 @@
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>crear usuario</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="Icon" type="image/png" th:href="@{/images/logo_MIALEDS_pestaña.png}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+<body>
+<div th:replace="~{fragments/menu :: header}"></div>
+
+<main class="main container">
+    <h4 class="center-align">Crear Nuevo Usuario</h4>
+
+    <form id="form-crear-usuario" onsubmit="return validarClaves()" th:action="@{/usuario/nuevoUsuario}" method="post">
+        <div class="row">
+
+            <!-- Nombre -->
+            <div class="input-field col s12 m6">
+                <input id="nombre" name="usuario_nuevo_nombre" type="text" required>
+                <label for="nombre">Nombre</label>
+            </div>
+
+            <!-- Cédula -->
+            <div class="input-field col s12 m6">
+                <input id="cedula" name="usuario_nuevo_cedula" type="text" required>
+                <label for="cedula">Cédula</label>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="input-field col s12 m6">
+                <input id="clave" name="usuario_nuevo_clave" type="password" required>
+                <label for="clave">Contraseña</label>
+            </div>
+
+            <!-- Confirmación de contraseña -->
+            <div class="input-field col s12 m6">
+                <input id="clave_confirmacion" type="password" required>
+                <label for="clave_confirmacion">Confirmar contraseña</label>
+            </div>
+
+            <!-- Correo electrónico -->
+            <div class="input-field col s12 m6">
+                <input id="correo" name="usuario_nuevo_correo" type="email" required>
+                <label for="correo">Correo Electrónico</label>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="input-field col s12 m6">
+                <input id="telefono" name="usuario_nuevo_telefono" type="text" required>
+                <label for="telefono">Teléfono</label>
+            </div>
+
+            <!-- Rol -->
+            <div class="input-field col s12 m6">
+                <select id="role" name="usuario_nuevo_role" required>
+                    <option value="" disabled selected>Selecciona un rol</option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER">USER</option>
+                </select>
+                <label for="role">Rol</label>
+            </div>
+
+        </div>
+
+        <!-- Mensaje de error -->
+        <p id="error-clave" class="red-text center-align" style="display: none;">Las contraseñas no coinciden.</p>
+
+        <div class="center-align">
+            <button type="submit" class="btn red lighten-1">Crear Usuario</button>
+        </div>
+    </form>
+</main>
+<!-- Pie de página -->
+<footer class="page-footer red">
+    <small>&copy; Derechos Reservados 2024</small>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        M.FormSelect.init(document.querySelectorAll('select'));
+    });
+
+    function validarClaves() {
+        const clave = document.getElementById("clave").value;
+        const confirmacion = document.getElementById("clave_confirmacion").value;
+        const error = document.getElementById("error-clave");
+
+        if (clave !== confirmacion) {
+            error.style.display = "block";
+            return false;
+        }
+        error.style.display = "none";
+        return true;
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

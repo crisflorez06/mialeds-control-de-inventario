@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Configuración de caracteres y vista -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    
+    <!-- Enlaces a hojas de estilo -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Estilos personalizados -->
+    <link rel="Icon" type="image/png" th:href="@{/images/logo_MIALEDS_pestaña.png}"> <!-- Icono de la página -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Iconos de Material Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> <!-- Materialize CSS -->
+</head>
+<body>
+    <header>
+        <!-- Cabecera con logo -->
+        <div class="nav-wrapper red">
+            <img th:src="@{/images/logo_MIALEDS.png}" class="brand-logo center-align" id="imagenLogo">
+        </div>
+    </header>
+    <main>
+        <!-- Contenido principal de la página -->
+        <div class="row main_login">
+            <!-- Slider de imágenes -->
+            <div class="slider col m6 images">
+                <ul class="slides">
+                    <li>
+                        <img th:src="@{/images/ulloa.jpg}" class="responsive-img">
+                    </li>
+                    <li>
+                        <img th:src="@{/images/ulloa2.jpg}" class="responsive-img">
+                    </li>
+                    <li>
+                        <img th:src="@{/images/ulloa3.jpg}" class="responsive-img">
+                    </li>
+                </ul>
+            </div>
+            <!-- Formulario de inicio de sesión -->
+            <div class="container section center-align col m6 s12 cuadro_iniciar_sesion">
+                <div class="card-panel grey lighten-4 col m8 s12 push-m2">
+                    <h1 class="flow-text">Estación de gasolina Ulloa</h1>
+                    <h3 class="flow-text">Iniciar sesión</h3>
+                    <div class="container center-align">
+                        <div th:if="${param.error}" class="red-text">
+                            <p>Usuario o contraseña incorrectos.</p>
+                        </div>
+                        <form name="iniciar_sesion" method="POST" th:action="@{/login}">
+                            <!-- Campo de usuario --> 
+                            <div class="input-field col s12">
+                                <input type="text" id="username" name="username" maxlength="12" class="validate" required>
+                                <label for="username">
+                                    <i class="tiny material-icons">account_circle</i> Usuario 
+                                </label>
+                            </div>
+                            <!-- Campo de contraseña -->
+                            <div class="input-field col s12">
+                                <input type="password" id="password" name="password" class="validate" required>
+                                <label for="password">
+                                    <i class="tiny material-icons">lock</i> Contraseña
+                                </label>
+                            </div>
+                            <!-- Botón de inicio de sesión -->
+                            <div>
+                                <button class="waves-effect waves-light btn red" type="submit" name="accion" value="ingresar">Ingresar</button>
+                            </div>
+                        </form>
+                        <!-- Enlace para olvidar contraseña -->
+                        <a class="waves-effect waves-light btn-flat modal-trigger red-text" href="#olvide_clave">Olvidé mi contraseña</a>
+                        
+                        <!-- Modal para olvidar contraseña -->
+                        <div id="olvide_clave" class="modal">
+                          <div class="modal-content m8">
+                            <h4 class="flow-text">Olvidé mi contraseña</h4>
+                            <form method="POST" th:action="@{/restaurarClave}">
+                                <div class="input-field">
+                                    <input type="text" id="identificacion_usuario_olvide_clave" name="cedula_olvide_clave" class="validate" required>
+                                    <label for="identificacion_usuario_olvide_clave">
+                                        <i class="tiny material-icons">badge</i> Número de identificación
+                                    </label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="correo_olvide_clave" name="correo_olvide_clave" class="validate" required>
+                                    <label for="correo_olvide_clave">
+                                        <i class="tiny material-icons">email</i> Correo electronico 
+                                    </label>
+                                </div>
+                                <div id="errorDivOlvidarClave" class="error col s12"></div> <!-- Div para mostrar errores -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para confirmar la eliminación del producto -->
+                                    <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Aceptar</button>
+                                    <!-- Enlace para cancelar la eliminación y cerrar el modal -->
+                                    <a href="#!" class="modal-close waves-effect waves-flat btn-flat red white-text">Cerrar</a>
+                                </div>
+                            </form>
+                          </div>
+                          <!-- Botones del modal -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="page-footer red">
+        <small>&copy; Derechos Reservados 2024</small>
+    </footer>
+    
+    <!-- Scripts de JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> <!-- Materialize JS -->
+    <script th:src="@{/js/script.js}"></script> <!-- Script personalizado -->
+    <script th:src="@{/js/erroresForm.js}"></script>
+</body>
+</html>

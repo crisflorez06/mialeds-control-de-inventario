@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Proveedor</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="Icon" type="image/png" th:href="@{/images/logo_MIALEDS_pestaña.png}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+    <body>
+
+    <div th:fragment="header" th:replace="~{fragments/menu :: header}"></div>
+
+    <main class="main" th:if="${admin}">
+        <div class="row">
+            <div class="col s12 cuadro_botones_proveedores">
+                <div class="col s1"></div>
+                <form th:action="@{/proveedor/buscar}" method="GET">
+                    <!-- Campo de entrada para buscar productos -->
+                    <div class="input-field col s10 m4 ">
+                        <!-- Input de texto para la búsqueda de productos -->
+                        <input type="text" name="producto">
+                        <!-- Label asociado al input -->
+                        <label for="producto">Buscar productos</label>
+                    </div>
+                    <!-- Botón para enviar el formulario de búsqueda -->
+                    <button type="submit" class="btn white boton_buscador red-text col s1">
+                        <!-- Icono de búsqueda -->
+                        <i class="material-icons">search</i>
+                    </button>
+                </form>
+                <div class="col m2"></div>
+                <!--registro entrada de productos y registro de proveedores-->
+
+                <div class="center col s12 m2 cuadro_botones_opciones botones_proveedores">
+                    <div class="col s12">
+                        <a class="btn modal-trigger red crud" href="#proveedores">
+                            Proveedores
+                        </a>   
+                    </div>
+
+                    <div class="col s12">
+                        <a class="btn modal-trigger red crud" href="#registrar_precio">
+                            registrar precio
+                        </a>
+                    </div>
+                </div>
+
+                <!--lista de proveedores-->
+                <div id="proveedores" class="modal center-align" >
+                    <div class="modal-content white">
+                      <h5 class="red-text">Proveedores registrados</h5>
+                      <table class="centered">
+                          <thead>
+                              <tr>
+                                    <th>Nombre</th>
+                                    <th>NIT</th>
+                                    <th>email</th>
+                                    <th>telefono</th>
+                                    <th>
+                                        <a class="dropdown-trigger btn tooltipped red-text boton_ajustes" 
+                                           data-position="bottom" 
+                                           data-tooltip="ajustes de inventario" 
+                                           href='#' 
+                                           data-target='settings_proveedor'>
+                                            <i class="tiny material-icons">settings</i>
+                                        </a>
+                                        <!-- Menú desplegable para opciones de ajustes -->
+                                        <ul id='settings_proveedor' class='dropdown-content'>
+                                            <li><a href="#nuevo_proveedor" class="modal-trigger" data-value="nuevo_proveedor">
+                                                <i class="material-icons">person_add</i>Nuevo proveedor 
+                                            </a></li>
+                                            <li><a href="#!" data-value="editar_proveedor">
+                                                <i class="material-icons">edit</i>Editar proveedor
+                                            </a></li>
+                                            <li><a href="#!" data-value="eliminar_proveedor">
+                                                <i class="material-icons">delete</i>Eliminar proveedor
+                                            </a></li>
+                                        </ul>
+                                    </th>                                  
+                              </tr>
+                          </thead>
+                          <tbody>
+                                <tr th:each="proveedor : ${proveedores}">
+                                    <td th:text="${proveedor.nombre}"></td>
+                                    <td th:text="${proveedor.nit}"></td>
+                                    <td th:text="${proveedor.correoElectronico}"></td>
+                                    <td th:text="${proveedor.telefono}"></td>
+                                    <td>
+                                        <a class="btn red-text white opciones"
+                                            id="selector_proveedor"
+                                            style="display: none;"
+                                            th:data-idProveedor="${proveedor.idProveedor}" 
+                                            th:data-nombreProveedor="${proveedor.nombre}"
+                                            th:data-nitProveedor="${proveedor.nit}"
+                                            th:data-correoProveedor="${proveedor.correoElectronico}"
+                                            th:data-telefonoProveedor="${proveedor.telefono}">
+                                                <i class="material-icons tiny">radio_button_unchecked</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-footer cuadro_botones_1">
+                      <a th:href="@{/proveedor/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text col s3">cerrar</a>
+                    </div>
+                </div>
+                <!--registrar nuevo proveedor-->
+                <div id="nuevo_proveedor" class="modal">
+                    <div class="modal-content configuracion_perfil">
+                        <div class="container">
+                            <div class="row">
+                                <form th:action="@{/proveedor/nuevo}" method="POST" class="col s12">
+                                    <div class="row">
+                                        <div class="col s12 center-align">
+                                            <h5 class="red-text">Nuevo proveedor</h5>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <input type="text" id="nuevo_nombre_proveedor" name="nuevo_nombre_proveedor" class="validate" required>
+                                            <label for="nuevo_nombre_proveedor">nombre de proveedor</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <input type="number" id="nuevo_nit_proveedor" name="nuevo_nit_proveedor" class="validate" required>
+                                            <label for="nuevo_nit_proveedor">NIT</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <input type="email" id="nuevo_correo_proveedor" name="nuevo_correo_proveedor" class="validate" required>
+                                            <label for="nuevo_correo_proveedor">correo electronico</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <input type="tel" id="nuevoo_telefono_proveedor" name="nuevo_telefono_proveedor" class="validate" required>
+                                            <label for="nuevo_telefono_proveedor">numero de celular</label>
+                                        </div>
+                                        <div class="modal-footer cuadro_botones_2 white">
+                                            <!-- Botón para enviar el formulario y actualizar el producto -->
+                                            <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Agregar</button>
+                                            <!-- Enlace para cerrar el modal y regresar a la lista de productos -->
+                                            <a href="#!" class="modal-close waves-effect waves-flat btn-flat red white-text">Cancelar</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <!--editar proveedor-->               
+                <div id="editar_proveedor" class="modal">
+                      <div class="modal-content configuracion_perfil">
+                          <div class="container">
+                              <div class="row">
+                                <form th:action="@{/proveedor/editar}" method="POST">
+                                    <input type="hidden" name="_method" value="PUT">
+                                      <div class="row">
+                                          <div class="col s12 center-align">
+                                              <h5 class="red-text">Proveedor</h5>
+                                          </div>
+                                          <input type="hidden" name="editar_id_proveedor" id="editar_id_proveedor">
+                                          <div class="input-field col s12">
+                                              <input type="text" id="editar_nombre_proveedor" name="editar_nombre_proveedor" class="validate" required placeholder="">
+                                              <label for="editar_nombre_proveedor">nombre de proveedor</label>
+                                          </div>
+                                          <div class="input-field col s12">
+                                              <input type="number" id="editar_nit_proveedor" name="editar_nit_proveedor" class="validate" required placeholder="">
+                                              <label for="editar_nit_proveedor">NIT</label>
+                                          </div>
+                                          <div class="input-field col s12">
+                                              <input type="email" id="editar_correo_proveedor" name="editar_correo_proveedor" class="validate" required placeholder="">
+                                              <label for="editar_correo_proveedor">correo electronico</label>
+                                          </div>
+                                          <div class="input-field col s12">
+                                              <input type="tel" maxlength="10" id="editar_telefono_proveedor" name="editar_telefono_proveedor" class="validate" required placeholder="">
+                                              <label for="editar_telefono_proveedor">numero de celular</label>
+                                          </div>
+                                          <div class="modal-footer cuadro_botones_2 white">
+                                            <!-- Botón para enviar el formulario y actualizar el producto -->
+                                            <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Actualizar</button>
+                                            <!-- Enlace para cerrar el modal y regresar a la lista de productos -->
+                                            <a href="#!" class="modal-close waves-effect waves-flat btn-flat red white-text">Cancelar</a>
+                                        </div>
+                                      </div>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+                <!--eliminar proveedor-->
+                <div id="eliminar_proveedor" class="modal center-align">
+                    <div class="modal-content white">
+                        <h6 class="red-text"><span id="proveedor_eliminar"></span></h6>
+                        <div class="col s12">
+                            <!-- Formulario para eliminar el producto -->
+                            <form th:action="@{/proveedor/eliminar}" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <!-- Campo oculto para el ID del producto a eliminar -->
+                                <div class="input-field">
+                                    <input type="hidden" name="id_proveedor_eliminar">
+                                </div>
+                                <!-- Pie del modal con botones para confirmar o cancelar -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para confirmar la eliminación del producto -->
+                                    <button type="submit" class="btn waves-effect waves-flat btn-flat red white-text">Eliminar</button>
+                                    <!-- Enlace para cancelar la eliminación y cerrar el modal -->
+                                    <a href="#!" class="modal-close waves-effect waves-flat btn-flat green white-text">Cancelar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                  <!--registrar precio de compra de los proveedores-->
+
+                <div id="registrar_precio" class="modal center-align" >
+                    <div class="modal-content white">
+                        <h5 class="red-text">Registrar precio de compra de proveedores</h5>
+                        <form th:action="@{/proveedor/asignarPrecio}" method="POST">
+                            <input type="hidden" name="_method" value="PUT">
+                            <div class="col s12">
+                                <div class="input-field col s12 m5 buscador">
+                                    <input type="text" id="buscar_producto" class="autocomplete" autocomplete="off" required>
+                                    <label for="buscar_entrada">
+                                        Producto
+                                    </label>
+                                    <input type="hidden" id="id_producto" name="id_producto_precio" value="0">
+                                </div> 
+                                <div class="input-field col s12 m5 buscador">
+                                    <input type="text" id="buscar_proveedor" class="autocomplete" autocomplete="off" required>
+                                    <label for="buscar_entrada">
+                                        Proveedor
+                                    </label>
+                                    <input type="hidden" id="id_proveedor" name="id_proveedor_precio" value="0">
+                                </div> 
+                                <div class="input-field col s4 m2">
+                                    <input type="number" id="precio_proveedor" name="precio_proveedor" class="autocomplete" autocomplete="off" data-position="bottom" required>
+                                    <label for="precio_proveedor">
+                                        precio
+                                    </label>
+                                </div>
+                                <div id="errorDivRegistrarPrecio" class="error col s12"></div> <!-- Div para mostrar errores -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <!-- Botón para confirmar la eliminación del producto -->
+                                    <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Asignar</button>
+                                    <!-- Enlace para cancelar la eliminación y cerrar el modal -->
+                                    <a th:href="@{/proveedor/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text">Cerrar</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <table class="centered">
+                <thead>
+                    <th>Producto</th>
+                </thead>
+                <tbody>
+                    <!-- Iterar sobre el mapa de productos agrupados por nombre -->
+                    <tr th:each="producto : ${productosAgrupados}">
+                        <!-- Mostrar el nombre y la presentación del producto en la primera columna -->
+                        <td th:text="${producto.key}" style="font-weight: bold;"></td>
+                        <td>
+                            <!-- Tabla anidada para mostrar proveedores y precios -->
+                            <table class="centered">
+                                <thead>
+                                    <tr>
+                                        <!-- Iterar sobre los proveedores del producto y mostrar sus nombres -->
+                                        <th th:each="pp : ${producto.value}" th:text="${pp.proveedor.nombre}"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <!-- Iterar sobre los proveedores del producto y mostrar el precio de compra de cada uno -->
+                                        <td th:each="pp : ${producto.value}" th:text="${pp.precioCompraProveedor}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div> 
+    </main>
+    
+    <footer class="page-footer red">
+        <small>&copy; Derechos Reservados 2024</small>
+    </footer>
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script th:src="@{/js/script.js}"></script> <!-- Script personalizado -->
+    <script th:src="@{/js/configTablaProveedores.js}"></script> <!-- Script personalizado -->
+    <script th:src="@{/js/listarProductos.js}"></script>
+    <script th:src="@{/js/listarProveedores.js}"></script>
+    <script th:src="@{/js/erroresForm.js}"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Servicio de la Base de Datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: mialeds-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: 'mialeds_db'
+      MYSQL_USER: 'mialeds_user'
+      MYSQL_PASSWORD: 'mialeds_password'
+      MYSQL_ROOT_PASSWORD: 'root_password'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - mialeds-network
+
+  # Servicio de la Aplicación Spring Boot
+  app:
+    container_name: mialeds-app
+    # Construye la imagen a partir del Dockerfile en el directorio actual
+    build: .
+    ports:
+      - "8080:8080"
+    # Variables de entorno para configurar la aplicación
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mialeds_db?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: mialeds_user
+      SPRING_DATASOURCE_PASSWORD: mialeds_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # Configuración del correo (el usuario y clave se toman del archivo .env)
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - mialeds-network
+
+# Red para la comunicación entre contenedores
+networks:
+  mialeds-network:
+    driver: bridge
+
+# Volumen para persistir los datos de la base de datos
+volumes:
+  mysql-data:

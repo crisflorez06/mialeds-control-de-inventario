@@ -1,0 +1,363 @@
+/*se utilizo para que el footer siempre permanezca en la parte de abajo*/
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+.main {
+    padding-top: 8% !important;
+}
+
+/*quitar el azul cuando se activa un input*/
+.active {
+    color:rgba(0,0,0,0.87) !important;
+}
+
+.input-field input:focus {
+    border-bottom: 1px solid black !important;
+    box-shadow: 0 1px 0 0 black !important;
+}
+
+/*se utilizo para organizar la imagenes en login y inicio de sesion*/
+.main_login {
+    margin-bottom: 0px !important;
+}
+
+.cuadro_iniciar_sesion {
+    margin-top: 2% !important;
+}
+/*footer*/
+.page-footer {
+    padding-top: 7px !important;
+    width: auto !important;
+}
+/*header*/
+.barraNav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 300 !important;
+}
+
+.icono_menu {
+    width: 8% !important;
+    height: 64px !important;
+}
+
+.logo {
+    width: 92% !important;
+    box-shadow: none !important;   
+}
+
+.icono_menu {
+    font-size: 3rem !important;
+    padding: 0% !important;
+    margin: 0% !important;
+}
+
+.icono_menu a {
+    color: white;
+}
+
+/*cuadro de menu de ajustes de usuario*/
+/*utilizado para darle estilo a los botones de ajustes*/
+.boton_ajustes {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.cuadro_ajustes {
+    height: 30px !important;
+}
+
+.texto_usuario {
+    margin-top: 0px !important;
+}
+
+.adm {
+    font-weight: 450 !important;
+}
+
+.cuadro_logo_usuario {
+    height: 60px !important;
+}
+
+.cuadro_usuario {
+    padding: 12px 24px 0 8px !important;
+}
+
+/*ventana de ajustes de usuario*/
+.configuracion_perfil{
+    padding: 8px 12px 12px 0 !important;
+}
+/*utilizado para configurar la mayoria de botones de la app*/
+.cuadro_botones_2, .cuadro_botones_1 {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.cuadro_botones_1 a{
+    text-align: center !important;
+    border-radius: 10px !important;
+    margin:0 0px 8px !important;
+}
+
+.cuadro_botones_1 button{
+    text-align: center !important;
+    border-radius: 10px !important;
+    margin:0 0px 8px !important;
+}
+
+.cuadro_botones_2 a{
+    text-align: center !important;
+    border-radius: 10px !important;
+    margin:0 12px 8px !important;
+}
+
+.cuadro_botones_2 button.btn{
+    text-align: center !important;
+    border-radius: 10px !important;
+    margin:0 12px 8px !important;
+}
+
+.cuadro_botones_1_registros a{
+    text-align: center !important;
+    border-radius: 10px !important;
+    margin:20px 0px 8px !important;
+}
+/*entrada, salida y crear de inventario botones*/
+.crud{
+    width: 180px !important;
+    margin-right: 0 !important;
+}
+
+.cuadro_botones_opciones a{
+    text-align: center !important;
+    border-radius: 10px !important;
+    margin:0 0px 8px !important;
+}
+
+/*boton de aceites escasos*/
+.boton_escasos{
+    background-color: transparent !important;
+    box-shadow: none !important;
+    margin-top: 17%;
+}
+.boton_escasos i{
+    font-size: 3.5rem !important
+}
+/*buscador del inventario*/
+.buscador {
+    margin-top: 3% !important;
+}
+/*estilo de boton buscar*/
+.boton_buscador{
+    background-color: transparent !important;
+    box-shadow: none !important;    
+    margin: 3px !important
+}
+
+.boton_buscador i{
+    font-size: 2rem !important;
+}
+
+.cuadro_botones_buscar {
+    margin: 0 !important;
+    padding-left: 0px !important;
+
+}
+/*color de los menus desplegables, mayormente en los botones de editar*/
+.dropdown-content li>a {
+    color: #f44336 !important;
+}
+/*buscador rango fecha en ventas*/
+.boton_buscador_fecha{
+    background-color: transparent !important;
+    box-shadow: none !important;    
+    margin: 3px !important
+}
+
+.boton_buscador_fecha i{
+    font-size: 2rem !important;
+}
+
+.cuadro_botones_buscar_fecha {
+    margin-top: 20px !important;
+    padding-left: 0px !important;
+
+}
+/*cuadro total ventas*/
+.cuadro_total_ventas_principal {
+    background-color: #fff;
+    border-radius: 15px !important;
+    border: 2px solid #f44336;
+}
+
+.cuadro_total_ventas_principal .card-content {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px !important;
+}
+
+
+.cuadro_total_ventas_principal .card-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important ;
+    font-weight: 400 !important;
+}
+
+.cuadro_total_ventas_principal .card-title>i {
+    font-size: 2rem !important;
+}
+
+.cuadro_total_ventas_principal:hover {
+    transform: scale(1.05) !important;
+    transition: transform 0.3s !important;
+}
+
+/*cuadro boton de registrar ventas*/
+.boton_ventas {
+    margin-top: 20px !important;
+}
+
+/*cuadro total de ventas que se estan registrando */
+.cuadro_total_ventas_registro {
+    background-color: #fff;
+    border-radius: 15px !important;
+    border: 2px solid #f44336;
+}
+
+.cuadro_total_ventas_registro .card-content {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2px !important;
+}
+
+
+.cuadro_total_ventas_registro .card-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 400 !important;
+}
+
+.cuadro_total_ventas_registro .card-title>i {
+    font-size: 2rem !important;
+}
+
+.cuadro_total_ventas_principal:hover {
+    transform: scale(1.05) !important;
+    transition: transform 0.3s !important;
+}
+
+/*recuadro donde estan ubicados los botones de los proveedores*/
+.botones_proveedores {
+    margin-top: 24px !important;
+}
+/*edicion de molades*/
+.modal-content {
+    background-color: #FAFAFA !important;
+}
+
+table th, table td {
+    text-transform: uppercase;
+}
+
+.opciones{
+    background-color: transparent !important;
+    box-shadow: none !important;    
+}
+
+.error{
+    margin-top: 15px !important;
+}
+@media only screen and (max-width: 600px) {
+    .main {
+        padding-top: 20% !important;
+    }
+
+    /*se utilizo para organizar la imagenes en login y inicio de sesion*/
+    
+    .images {
+        display: none;
+    }
+
+    .icono_menu {
+        width: 15% !important;
+        height: 56px !important;
+    }
+    /*header*/
+    .logo {
+        width: 85% !important;
+    }
+    /*ventanas modales al abrirse*/
+    .modal {
+        width: 100% !important;
+    }
+
+    /*cambiar posicion en los botones de inventario*/
+    .botones_inventario {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+    .buscador {
+        order: 2 !important;
+        margin-top: 4% !important;
+        
+      }
+      .cuadro_escasos {
+        order: 1 !important;
+      }
+    /*botones de aceptar de los registros de entradas y salidas*/
+    .cuadro_botones_1_registros{
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /*cambiar posiciones en los botones de ventas*/
+    .botones_ventas {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        
+    }
+    .cuadro_busqueda_ventas {
+        order: 4 !important;
+    }
+
+    .total_ventas_precio span {
+        background-color: #fff;
+        border-radius: 12px !important;
+        border: 2px solid #f44336;
+        padding: 8px !important;
+    }
+
+    .cuadro_total_ventas_principal {
+        border: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+    }
+
+    .cuadro_botones_proveedores {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+
+    table {
+        font-size: 10px !important; 
+    }
+    table th, table td {
+        padding: 6px !important; 
+    }
+
+    
+}

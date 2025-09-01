@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ventas</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="Icon" type="image/png" th:href="@{/images/logo_MIALEDS_pestaña.png}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+<body>
+    <!-- Carga del menú de navegación -->
+    <div th:replace="~{fragments/menu :: header}"></div>
+    <main class="main">
+        <div class="row">
+            <div class="col s12 botones_ventas">
+                <div>
+                    <!-- Formulario para buscar productos por fecha o nombre -->
+                    <form th:action="@{/venta/buscar}" method="GET">
+                        <div class="input-field col s6 m2">
+                            <input type="date" id="buscar" name="fecha_busqueda" class="fecha tooltipped" data-position="bottom" data-tooltip="fecha busqueda">
+                        </div>
+                        <div class="input-field col s10 m3">
+                            <input type="text" name="producto_nombre">
+                            <label for="producto">Buscar productos</label>
+                        </div>
+                        <button type="submit" class="btn white boton_buscador red-text col s1">
+                            <i class="material-icons">search</i>
+                        </button>
+                    </form>
+                <!-- Tarjeta que muestra el total de ventas -->                
+                    <div class="card col s12 m2 cuadro_total_ventas_principal">
+                        <div class="card-content total_ventas_precio">
+                            <span class="card-title tooltipped" data-position="bottom" data-tooltip="total ventas">
+                                <i class="material-icons red-text">attach_money</i>
+                                <span th:text="${totalVentas}"></span> 
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col m1"></div>
+                </div>
+                <div class="col s12 m2 cuadro_botones_1 boton_ventas">
+                    <!--registro entrada de una venta-->
+                    <div class="col m12">
+                        <a class="btn modal-trigger red crud" href="#registrar_venta">
+                            registrar venta
+                        </a>   
+                    </div>
+                    <!-- Modal para registrar una nueva venta -->
+                    <div id="registrar_venta" class="modal center-align" >
+                      <div class="modal-content white">
+                        <h5 class="red-text">Registrar ventas</h5>
+                        <form th:action="@{/venta/nuevo}" method="POST">
+                            <div class="col s12">
+                                <div class="input-field col s12 m6 buscador">
+                                    <input type="text" id="buscar_producto" class="autocomplete" autocomplete="off" required>
+                                    <label for="buscar_entrada">
+                                        Producto
+                                    </label>
+                                    <input type="hidden" id="id_producto" name="id_producto_venta">
+                                </div> 
+                                <div class="input-field col s6 m2">
+                                    <input type="number" id="cantidad_entrada_venta" name="cantidad_entrada_venta" class="autocomplete " data-position="bottom" autocomplete="off" required>
+                                    <label for="cantidad_entrada">
+                                        cantidad
+                                    </label>
+                                </div>
+                                <div class="input-field col s6 m4">
+                                    <input type="date" id="fecha_venta" name="fecha_venta" data-position="bottom" required>
+                                </div>
+                                <div id="errorDivNuevaVenta" class="error col s12"></div> <!-- Div para mostrar errores -->
+                                
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <button type="submit"  class="btn waves-effect waves-flat btn-flat green white-text">Agregar</button>
+                                    <a th:href="@{/venta/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text">Cerrar</a>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- Modal para editar una venta -->
+                    <div id="editar_venta" class="modal center-align" th:if="${admin}">
+                      <div class="modal-content white">
+                        <h5 class="red-text">Editar Venta</h5>
+                        <form th:action="@{/venta/editar}" method="POST">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" id="id_venta_editar" name="id_venta_editar">
+                            <div class="col s12">
+                                <div class="input-field col s12 m5 buscador">
+                                    <input type="text" id="producto_editar_venta" name="producto_editar_venta" placeholder=" " readonly>
+                                    <label for="producto_editar_venta">
+                                        Producto
+                                    </label>
+                                    <input type="hidden" id="id_producto_venta" name="id_producto_venta">
+                                </div> 
+                                <div class="input-field col s6 m2">
+                                    <input type="number" id="cantidad_editar_venta" name="cantidad_editar_venta" placeholder=" " required>
+                                    <label for="cantidad_editar_venta">
+                                        cantidad
+                                    </label>
+                                </div>
+                                <div class="input-field col s6 m2">
+                                    <input type="number" id="cantidad_editar_total_venta" name="cantidad_editar_total_venta" placeholder=" " required>
+                                    <label for="cantidad_editar_total_venta">
+                                        total venta
+                                    </label>
+                                </div>
+                                <div class="input-field col s6 m3">
+                                    <input type="date" id="fecha_editar_venta" name="fecha_editar_venta" data-position="bottom" placeholder=" " required>
+                                    <label for="fecha_editar_venta">
+                                        fecha
+                                    </label>
+                                </div>
+                                <div id="errorDivEditarProducto" class="error col s12"></div> <!-- Div para mostrar errores -->
+                                <div class="modal-footer cuadro_botones_2 white">
+                                    <button type="submit"  class="btn waves-effect waves-flat btn-flat green white-text">Aceptar</button>
+                                    <a th:href="@{/venta/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- Modal para eliminar un producto -->
+                    <div id="eliminar_venta" class="modal center-align" th:if="${admin}">
+                        <div class="modal-content white">
+                            <h6 class="red-text">¿Seguro deseas eliminar esta venta?</h6>
+                            <h6 class="red-text"><span id="mensaje_eliminar"></span></h6>
+                            <div class="col s12">
+                                <form th:action="@{/venta/eliminar}" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <div class="input-field">
+                                        <input type="hidden" name="id_eliminar_venta">
+                                    </div>
+                                    <div class="modal-footer cuadro_botones_2 white">
+                                        <button type="submit" class="btn waves-effect waves-flat btn-flat red white-text">Eliminar</button>
+                                        <a th:href="@{/venta/listar}" class="modal-close waves-effect waves-flat btn-flat green white-text">Cancelar</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <!-- Tabla que muestra los productos registrados -->
+            <table class="centered">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Presentación</th>
+                        <th>Precio</th>
+                        <th>Cantidad vendida</th>
+                        <th>Total venta</th>
+                        <th>Fecha</th>
+                        <th th:if="${admin}">
+                            <a class="dropdown-trigger btn tooltipped red-text boton_ajustes" data-position="bottom" data-tooltip="ajustes de ventas" href='#' data-target='settings_venta'>
+                                <i class="tiny material-icons ">settings</i>
+                            </a>
+                            <ul id='settings_venta' class='dropdown-content'>
+                                <br>
+                                <li><a href="#!" data-value="editar_venta">
+                                    <i class="material-icons">edit</i>Editar venta</a>
+                                </li>
+                                <li><a href="#!" data-value="eliminar_venta">
+                                    <i class="material-icons">delete</i>Eliminar venta</a>
+                                </li>
+                            </ul>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="venta : ${ventas}">
+                        <!-- Muestra los detalles de la venta -->
+                        <td th:text="${venta.producto.nombre}"></td>
+                        <td th:text="${venta.producto.presentacion}"></td>
+                        <td th:text="${venta.producto.precioVenta}"></td>
+                        <td th:text="${venta.cantidad}"></td>
+                        <td th:text="${venta.totalVenta}"></td>
+                        <td th:text="${venta.fecha}"></td>
+                        <td th:if="${admin}">
+                            <!-- Enlace de opción con datos del la venta (se muestra u oculta según sea necesario) -->
+                            <a class="btn red-text white opciones" 
+                                id="selector_venta" 
+                                style="display: none;"
+                                th:data-id-venta="${venta.idVenta}"
+                                th:data-id-producto="${venta.producto.idProducto}"
+                                th:data-fecha="${venta.fecha}"
+                                th:data-total-venta="${venta.totalVenta}"
+                                th:data-id-usuario="${venta.usuario.idUsuario}"
+                                th:data-producto="${venta.producto.nombre + ' ' + venta.producto.presentacion}"
+                                th:data-cantidad="${venta.cantidad}">
+                                <i class="material-icons tiny">radio_button_unchecked</i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <footer class="page-footer red">
+        <small>&copy; Derechos Reservados 2024</small>
+    </footer>
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js}"></script>
+    <script th:src="@{/js/configTablaVentas.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/listarProductos.js}"></script>
+    <script th:src="@{/js/erroresForm.js}"></script>
+</body>
+</html>

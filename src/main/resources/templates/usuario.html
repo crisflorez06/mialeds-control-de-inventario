@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Configuración de caracteres y vista -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario</title>
+    
+    <!-- Enlaces a hojas de estilo -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Estilos personalizados -->
+    <link rel="Icon" type="image/png" th:href="@{/images/logo_MIALEDS_pestaña.png}"> <!-- Icono de la página -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Iconos de Material Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> <!-- Materialize CSS -->
+</head>
+<body>
+    <header>
+        <!-- Cabecera con logo -->
+        <div class="nav-wrapper red">
+            <img th:src="@{/images/logo_MIALEDS.png}" class="brand-logo center-align" id="imagenLogo">
+        </div>
+    </header>
+    <main>
+        <!-- Contenido principal de la página -->
+        <div class="container">
+            <form th:action="@{/inve/editar}" method="POST">
+                <input type="hidden" name="_method" value="PUT">
+                <!-- Campo oculto para el ID del producto a editar -->
+                <div class="input-field">
+                    <input type="hidden" name="id_editar">
+                </div>
+                <!-- Campo para ingresar el nombre del producto -->
+                <div class="input-field col s12 m3">
+                    <input type="text" id="nombre_producto_editar" placeholder="nombre" name="nombre_editar" class="autocomplete" required>
+                    <label for="nombre_producto_editar">
+                        Nombre producto
+                    </label>
+                </div>
+                <!-- Campo para ingresar la presentación del producto -->
+                <div class="input-field col s12 m3">
+                    <input type="text" id="presentacion_editar" placeholder="presentacion" name="presentacion_editar" class="autocomplete" required>
+                    <label for="presentacion_editar">
+                        Presentación
+                    </label>
+                </div>
+                <!-- Campo para ingresar el precio de compra del producto -->
+                <div class="input-field col s6 m3">
+                    <input type="number" id="precio_compra_editar" placeholder="precio compra" name="precio_compra_editar" class="autocomplete" required>
+                    <label for="precio_compra_editar">
+                        Precio compra
+                    </label>
+                </div>
+                <!-- Campo para ingresar el precio de venta del producto -->
+                <div class="input-field col s6 m3">
+                    <input type="number" id="precio_venta_editar" placeholder="precio venta" name="precio_venta_editar" class="autocomplete" required>
+                    <label for="precio_venta_editar">
+                        Precio venta
+                    </label>
+                </div>
+                <!-- Campo oculto para la cantidad del producto -->
+                <div class="input-field">
+                    <input type="hidden" name="cantidad_editar">
+                </div>
+                <!-- Pie del modal con botones para actualizar y cerrar -->
+                <div class="modal-footer cuadro_botones_2 white">
+                    <!-- Botón para enviar el formulario y actualizar el producto -->
+                    <button type="submit" class="btn waves-effect waves-flat btn-flat green white-text">Actualizar</button>
+                    <!-- Enlace para cerrar el modal y regresar a la lista de productos -->
+                    <a th:href="@{/inventario/listar}" class="modal-close waves-effect waves-flat btn-flat red white-text">cerrar</a>
+                </div>
+            </form>
+        </div> 
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="page-footer red">
+        <small>&copy; Derechos Reservados 2024</small>
+    </footer>
+    
+    <!-- Scripts de JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> <!-- Materialize JS -->
+    <script th:src="@{/js/script.js}"></script> <!-- Script personalizado -->
+    <script th:src="@{/js/erroresForm.js}"></script>
+</body>
+</html>
